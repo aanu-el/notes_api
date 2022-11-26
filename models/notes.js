@@ -5,7 +5,11 @@ const NoteSchema = new Schema({
     title: String,
     body: String,
     tags: [String],
-    category: [String]
+    category: [String],
+    userId: {
+        type: String,
+        required: true
+    }
 })
 
 const Notes = mongoose.model("Note", NoteSchema)

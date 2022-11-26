@@ -19,6 +19,11 @@ app.set('views', 'views')
 app.use(auth0Middleware)
 
 app.use('/notes', requiresAuth(), noteRouter)
+
+app.use('/profile', requiresAuth(), (req, res) => {
+    console.log(req.oidc.user)
+    res.send(req.oidc.user)
+})
 app.get('/', (req, res) => {
     res.render('index', {
         user: req.oidc.user

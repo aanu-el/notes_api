@@ -1,9 +1,15 @@
 const NotesModel = require("../models/notes")
 
+const getUser = function (req, res) {
+    const userId = req.oidc.user.sub
+    return userId
+}
+
 const getAllNotes = async (req, res) => {
     try {
         const notes = await NotesModel.find()
-        res.status(200).json({ status: true, notes: notes })
+        // res.status(200).json({ status: true, notes: notes })
+        res.status(200).render('all-notes', { notes: notes })
     } catch (err) {
         console.log(err)
         res.status(500).json({ status: false, error: err.message })
@@ -12,12 +18,14 @@ const getAllNotes = async (req, res) => {
 
 const createNotes = async (req, res) => {
     const newNote = req.body
+    const user_Id = getUser(req, res)
     try {
         const notes = await NotesModel.create({
             title: newNote.title,
             body: newNote.body,
             tags: newNote.tags,
-            category: newNote.category
+            category: newNote.category,
+            userId: user_Id
         })
         res.status(200).json({ status: "Created", notes: notes })
     } catch (err) {
